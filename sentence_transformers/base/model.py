@@ -1582,7 +1582,12 @@ This pull request has been automatically generated to add {self.__class__.__name
         transformers model can be located (e.g. a pure StaticEmbedding-only setup).
         """
         underlying = self.transformers_model
-        return getattr(underlying, "config", None)
+        if underlying is not None:
+            underlying.config = value
+        else:
+            raise AttributeError(
+            "Cannot set 'config': no underlying transformers model found."
+        )
 
     @property
     def _target_device(self) -> torch.device:
